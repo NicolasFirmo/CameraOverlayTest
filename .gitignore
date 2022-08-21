@@ -1,0 +1,25 @@
+# Folders
+.vs/
+.vscode/
+build/
+CMakeFiles/
+Debug/
+Release/
+x64/
+*.dir/
+
+# Files
+CMakeCache.txt
+cmake_install.cmake
+cmake_uninstall.cmake
+profile.json
+*.pc
+*.vcxproj*
+*.proj*
+*.sln
+imgui.ini
+
+# To be removed
+glfw3Config.cmake
+glfw3ConfigVersion.cmake
+glfw_config.h
