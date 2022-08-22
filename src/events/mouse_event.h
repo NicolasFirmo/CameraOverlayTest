@@ -41,10 +41,12 @@ struct MouseButtonEvent : public Event {
 };
 
 struct MouseMoveEvent : public Event {
-	MouseMoveEvent(Point2<double> pos) : pos(pos) {}
+	using point_value_type = double;
+
+	MouseMoveEvent(Point2<point_value_type> pos) : pos(pos) {}
 
 	[[nodiscard]] constexpr Type getType() const override { return Type::mouseMove; };
 	[[nodiscard]] std::string toString() const override;
 
-	Point2<double> pos;
+	Point2<point_value_type> pos;
 };

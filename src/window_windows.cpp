@@ -108,6 +108,13 @@ LRESULT CALLBACK Window::eventCallback(HWND handle, UINT message, WPARAM wParam,
 		closing_ = true;
 		break;
 	}
+	case WM_MOUSEMOVE: {
+		App::onEvent(MouseMoveEvent{
+			{.x = static_cast<MouseMoveEvent::point_value_type>(LOWORD(lParam)),
+			 .y = static_cast<MouseMoveEvent::point_value_type>(HIWORD(lParam))}
+		});
+		break;
+	}
 	}
 
 	return DefWindowProcA(handle, message, wParam, lParam);
