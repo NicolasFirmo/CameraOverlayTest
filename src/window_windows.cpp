@@ -34,8 +34,9 @@ void Window::init(const char* title, const Size2<GLsizei>& size, const bool vsyn
 
 	RegisterClassExA(&windowClass);
 
-	handle_ = CreateWindowExA(NULL, windowClass.lpszClassName, title, WS_CAPTION | WS_SYSMENU, 0, 0,
-							  size.w, size.h, nullptr, nullptr, windowClass.hInstance, nullptr);
+	handle_ = CreateWindowExA(NULL, windowClass.lpszClassName, title,
+							  WS_CAPTION | WS_SYSMENU | WS_SIZEBOX, 0, 0, size.w, size.h, nullptr,
+							  nullptr, windowClass.hInstance, nullptr);
 
 	deviceContext_ = GetDC(handle_);
 
@@ -106,6 +107,13 @@ LRESULT CALLBACK Window::eventCallback(HWND handle, UINT message, WPARAM wParam,
 	switch (message) {
 	case WM_CLOSE: {
 		closing_ = true;
+		break;
+	}
+	case WM_SIZE: {
+		App::onEvent(WindowSizeEvent{
+			{.w = static_cast<WindowSizeEvent::size_value_type>(LOWORD(lParam)),
+			 .h = static_cast<WindowSizeEvent::size_value_type>(HIWORD(lParam))}
+		});
 		break;
 	}
 	case WM_MOUSEMOVE: {

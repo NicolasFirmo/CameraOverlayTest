@@ -5,10 +5,12 @@
 #include "geometric/size.hpp"
 
 struct WindowSizeEvent : public Event {
-	WindowSizeEvent(Size2<int> size) : size(size) {}
+	using size_value_type = int;
+
+	WindowSizeEvent(Size2<size_value_type> size) : size(size) {}
 
 	[[nodiscard]] constexpr Type getType() const override { return Type::windowSize; };
 	[[nodiscard]] std::string toString() const override;
 
-	Size2<int> size;
+	Size2<size_value_type> size;
 };
