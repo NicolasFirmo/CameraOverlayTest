@@ -20,6 +20,15 @@ Size2<GLsizei> Window::size_{};
 int Window::vsync_{};
 bool Window::closing_ = false;
 
+// Windows OpenGl Extensions
+// from https://registry.khronos.org/OpenGL/api/GL/wglext.h
+typedef BOOL(WINAPI* PFNWGLSWAPINTERVALEXTPROC)(int interval);
+// typedef int(WINAPI* PFNWGLGETSWAPINTERVALEXTPROC)(void);
+static PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT_ = nullptr;
+// static PFNWGLGETSWAPINTERVALEXTPROC wglGetSwapIntervalEXT_ = nullptr;
+#define wglSwapIntervalEXT wglSwapIntervalEXT_
+//#define wglGetSwapIntervalEXT wglGetSwapIntervalEXT_
+
 void Window::init(const char* title, const Size2<GLsizei>& size, const bool vsyncEnabled) {
 	profileTraceFunc();
 
@@ -61,6 +70,12 @@ void Window::init(const char* title, const Size2<GLsizei>& size, const bool vsyn
 
 	debugAssert(gladLoaderLoadGL(), "Failed to initialize OpenGL context!");
 
+	wglSwapIntervalEXT =
+		reinterpret_cast<PFNWGLSWAPINTERVALEXTPROC>(wglGetProcAddress("wglSwapIntervalEXT"));
+	debugAssert(wglSwapIntervalEXT != nullptr, "Failed to load wglSwapIntervalEXT!");
+
+	setVsync(vsyncEnabled);
+
 	ShowWindow(handle_, SW_SHOW);
 
 	debugLog("OpenGL info:\n");
@@ -99,6 +114,7 @@ void Window::showFrame() {
 
 void Window::setVsync(bool enabled) {
 	vsync_ = enabled ? 1 : 0;
+	wglSwapIntervalEXT(vsync_);
 }
 
 void Window::setTitle(const char* title) {}

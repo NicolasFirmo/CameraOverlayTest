@@ -27,10 +27,6 @@ public:
 private:
 	static LRESULT CALLBACK eventCallback(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
 
-	// static void mouseButtonCallback(...
-	// static void mouseMoveCallback(...
-	// static void windowSizeCallback(...
-
 	static HWND handle_;
 	static HDC deviceContext_;
 	static HGLRC renderingContext_;
