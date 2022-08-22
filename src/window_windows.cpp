@@ -14,6 +14,8 @@ HWND Window::handle_			= nullptr;
 HDC Window::deviceContext_		= nullptr;
 HGLRC Window::renderingContext_ = nullptr;
 
+MSG Window::message_{};
+
 Size2<GLsizei> Window::size_{};
 int Window::vsync_{};
 bool Window::closing_ = false;
@@ -26,7 +28,7 @@ void Window::init(const char* title, const Size2<GLsizei>& size, const bool vsyn
 	WNDCLASSEXA windowClass{};
 	windowClass.cbSize		  = sizeof(WNDCLASSEXA);
 	windowClass.style		  = CS_OWNDC;
-	windowClass.lpfnWndProc	  = DefWindowProc;
+	windowClass.lpfnWndProc	  = Window::eventCallback;
 	windowClass.hInstance	  = GetModuleHandle(nullptr); //  get hInstance
 	windowClass.lpszClassName = "StaticWindowsWindow";
 
@@ -81,6 +83,11 @@ bool Window::closing() {
 
 void Window::pollEvents() {
 	profileTraceFunc();
+
+	while (PeekMessageA(&message_, handle_, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&message_);
+		DispatchMessageA(&message_);
+	}
 }
 
 void Window::showFrame() {

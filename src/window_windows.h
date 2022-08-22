@@ -35,6 +35,8 @@ private:
 	static HDC deviceContext_;
 	static HGLRC renderingContext_;
 
+	static MSG message_;
+
 	static Size2<GLsizei> size_;
 	static int vsync_;
 	static bool closing_;
