@@ -115,6 +115,29 @@ LRESULT CALLBACK Window::eventCallback(HWND handle, UINT message, WPARAM wParam,
 		});
 		break;
 	}
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP: {
+		const auto button =
+			message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ? MouseButton::left :
+			message == WM_RBUTTONDOWN || message == WM_RBUTTONUP ? MouseButton::right :
+																   MouseButton::middle;
+		const auto action =
+			message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN || message == WM_MBUTTONDOWN ?
+				MouseAction::pressed :
+				MouseAction::released;
+
+		const auto shift = wParam & MK_SHIFT ? MouseMods::shift : MouseMods::none;
+		const auto ctrl	 = wParam & MK_CONTROL ? MouseMods::ctrl : MouseMods::none;
+		const auto alt	 = GetKeyState(VK_MENU) < 0 ? MouseMods::alt : MouseMods::none;
+		const auto mods	 = static_cast<MouseMods>(shift | ctrl | alt);
+
+		App::onEvent(MouseButtonEvent{button, action, mods});
+		break;
+	}
 	}
 
 	return DefWindowProcA(handle, message, wParam, lParam);
