@@ -117,7 +117,9 @@ void Window::setVsync(bool enabled) {
 	wglSwapIntervalEXT(vsync_);
 }
 
-void Window::setTitle(const char* title) {}
+void Window::setTitle(const char* title) {
+	SetWindowTextA(handle_, title);
+}
 
 LRESULT CALLBACK Window::eventCallback(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) {
 	switch (message) {

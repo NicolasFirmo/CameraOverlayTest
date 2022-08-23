@@ -20,7 +20,7 @@ bool App::running = false;
 App::ExitCode App::init() {
 	profileTraceFunc();
 
-	Window::init("StickTheStick", {.w = 600, .h = 480});
+	Window::init("Camera Overlay Test", {.w = 600, .h = 480});
 	Renderer::init();
 	Renderer::setViewport({.size = Window::size()});
 
@@ -62,6 +62,9 @@ void App::shutdown() {
 
 void App::onEvent(Event&& evt) {
 	debugLog("app: {}\n", evt);
+
+	if constexpr (DEBUG)
+		Window::setTitle(fmt::format("{}", evt).c_str());
 
 	auto type = evt.getType();
 
